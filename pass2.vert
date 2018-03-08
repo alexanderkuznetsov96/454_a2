@@ -38,7 +38,8 @@ void main()
   // 'setMaterial' in wavefront.cpp and use the 'uniform' value that is
   // defined there.
 
-  colour = vec3(0,1,0);		// CHANGE THIS
+  //colour = vec3(0,1,0);		// CHANGE THIS
+  colour = kd;
 
   // calculate normal in WCS.  (Do not divide by w since this is a direction and w = 0.)
 

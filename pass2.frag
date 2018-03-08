@@ -62,5 +62,6 @@ void main()
   // Output the fragment colour, modified by the illumination model
   // and shadowing.
   
-  fragColour = vec4(0,1,0,1);	// CHANGE THIS
+  //fragColour = vec4(0,1,0,1);	// CHANGE THIS
+  fragColour = vec4(colour,1);
 }
