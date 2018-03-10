@@ -42,7 +42,7 @@ void main()
   // Look up the depth from the light in the shadowBuffer texture.
 
   //float shadowDepth = 0.5; // CHANGE THIS
-  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x;
+  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x + 0.01;
 
   // Determine whether the fragment is in shadow.
   //
@@ -63,6 +63,11 @@ void main()
   // 'texturing' == 1) or from the input colour.
 
   // YOUR CODE HERE
+  
+ float NdotL = dot(lightDir, normal);
+  //in vec3 normalVCCS = WCS_to_lightCCS*normal;
+  
+  fragColour = fragColour * NdotL*0.25;
 
   // Output the fragment colour, modified by the illumination model
   // and shadowing.
