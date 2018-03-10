@@ -54,7 +54,13 @@ void main()
   // prevent z-fighting.
 
   // YOUR CODE HERE
-  fragColour = vec4(colour,1);
+   if (texturing){
+	//fragColour = vec4(texture(objTexture,texCoords).rgb,1);
+	fragColour = vec4(1f,1f,1f,0f);
+  }else{
+	fragColour = vec4(colour,1);
+  }
+  
   if(fragDepth > shadowDepth){
     fragColour = 0.5 * fragColour;
   }
@@ -65,8 +71,11 @@ void main()
 
   // Choose the colour either from the object's texture (if
   // 'texturing' == 1) or from the input colour.
+  
 
   // YOUR CODE HERE
+  
+
   
   float NdotL = dot(lightDir, normal);
   float Iin = 0.25;
