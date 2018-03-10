@@ -46,7 +46,7 @@ void main()
   // Look up the depth from the light in the shadowBuffer texture.
 
   //float shadowDepth = 0.5; // CHANGE THIS
-  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x + 0.025;
+  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x + 0.015;
 
   // Determine whether the fragment is in shadow.
   //
