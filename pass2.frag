@@ -46,7 +46,7 @@ void main()
   // Look up the depth from the light in the shadowBuffer texture.
 
   //float shadowDepth = 0.5; // CHANGE THIS
-  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x + 0.01;
+  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x + 0.025;
 
   // Determine whether the fragment is in shadow.
   //
@@ -54,9 +54,9 @@ void main()
   // prevent z-fighting.
 
   // YOUR CODE HERE
-   if (texturing){
-	//fragColour = vec4(texture(objTexture,texCoords).rgb,1);
-	fragColour = vec4(1f,1f,1f,0f);
+  if (texturing){
+	fragColour = vec4(texture(objTexture,texCoords).rgb,1);
+//	fragColour = vec4(1f,1f,1f,0f);
   }else{
 	fragColour = vec4(colour,1);
   }
@@ -77,17 +77,18 @@ void main()
   
 
   
-  float NdotL = dot(lightDir, normal);
-  float Iin = 0.25;
-  vec3 R = (2f * NdotL) * normal - lightDir;
+  float NdotL = dot(normalize(lightDir), normalize(normal));
+  float Iin = 1.0;
+  vec3 R = (2.0 * NdotL) * normal - lightDir;
   R = normalize(R);
   vec3 V = eyePosition - wcsPosition;
   V = normalize(V);
-  float RdotV = dot(R,V);
+  float RdotV = max(dot(R,V),0.0);
   float specular = pow(RdotV,shininess);
   
-  
-  fragColour = fragColour * NdotL * Iin + vec4(specular * ks* Iin,0f) + Ia + Ie;
+  //fragColour = vec4(NdotL,0.0,0.0,0.0);
+  fragColour = fragColour * NdotL * Iin + vec4(specular * ks* Iin,0.0) + vec4(Ia,0.0) + vec4(Ie,0.0);
+  //fragColour = fragColour * NdotL * Iin + vec4(Ia,0.0) + vec4(Ie,0.0);
   //fragColour = vec4(specular * ks* Iin,0f);
 
   // Output the fragment colour, modified by the illumination model
