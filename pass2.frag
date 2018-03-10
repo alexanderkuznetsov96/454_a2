@@ -22,6 +22,10 @@ in vec2 texCoords;     // fragment texture coordinates (if provided)
 
 out vec4 fragColour;   // fragment's final colour
 
+uniform vec3 ks;
+uniform vec3 Ia;
+uniform vec3 Ie;
+uniform float shininess;
 
 void main()
 
@@ -64,10 +68,18 @@ void main()
 
   // YOUR CODE HERE
   
- float NdotL = dot(lightDir, normal);
-  //in vec3 normalVCCS = WCS_to_lightCCS*normal;
+  float NdotL = dot(lightDir, normal);
+  float Iin = 0.25;
+  vec3 R = (2f * NdotL) * normal - lightDir;
+  R = normalize(R);
+  vec3 V = eyePosition - wcsPosition;
+  V = normalize(V);
+  float RdotV = dot(R,V);
+  float specular = pow(RdotV,shininess);
   
-  fragColour = fragColour * NdotL*0.25;
+  
+  fragColour = fragColour * NdotL * Iin + vec4(specular * ks* Iin,0f) + Ia + Ie;
+  //fragColour = vec4(specular * ks* Iin,0f);
 
   // Output the fragment colour, modified by the illumination model
   // and shadowing.
