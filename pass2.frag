@@ -28,20 +28,21 @@ void main()
 {
   // Calculate the position of this fragment in the light's CCS.
 
-  vec4 ccsLightPos = vec4(1,2,3,4); // CHANGE THIS
+  vec4 ccsLightPos = WCS_to_lightCCS*vec4(wcsPosition,1);
 
   // Calculate the depth of this fragment in the light's CCS in the range [0,1]
   
-  float fragDepth = 0.5; // CHANGE THIS
+  float fragDepth = 0.5 * ((ccsLightPos.z / ccsLightPos.w) + 1.0); // CHANGE THIS
 
   // Determine the (x,y) coordinates of this fragment in the light's
   // CCS in the range [0,1]x[0,1].
 
-  vec2 shadowTexCoords = vec2(1,1); // CHANGE THIS
+  vec2 shadowTexCoords = vec2(0.5 * ((ccsLightPos.x / ccsLightPos.w) + 1.0),0.5 * ((ccsLightPos.y / ccsLightPos.w) + 1.0)); // CHANGE THIS
 
   // Look up the depth from the light in the shadowBuffer texture.
 
-  float shadowDepth = 0.5; // CHANGE THIS
+  //float shadowDepth = 0.5; // CHANGE THIS
+  float shadowDepth = texture(shadowBuffer, shadowTexCoords).rgb.x;
 
   // Determine whether the fragment is in shadow.
   //
@@ -49,6 +50,10 @@ void main()
   // prevent z-fighting.
 
   // YOUR CODE HERE
+  fragColour = vec4(colour,1);
+  if(fragDepth > shadowDepth){
+    fragColour = 0.5 * fragColour;
+  }
 
   // Compute illumination.  Initially just do diffuse "N dot L".  Later do Phong.
 
@@ -63,5 +68,5 @@ void main()
   // and shadowing.
   
   //fragColour = vec4(0,1,0,1);	// CHANGE THIS
-  fragColour = vec4(colour,1);
+  //fragColour = vec4(colour,1);
 }
